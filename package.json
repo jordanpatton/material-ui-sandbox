@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jordanpatton/material-ui-sandbox/issues"
   },
-  "homepage": "https://github.com/jordanpatton/material-ui-sandbox#readme"
+  "homepage": "https://github.com/jordanpatton/material-ui-sandbox#readme",
+  "devDependencies": {
+    "create-react-app": "^3.3.0"
+  }
 }
