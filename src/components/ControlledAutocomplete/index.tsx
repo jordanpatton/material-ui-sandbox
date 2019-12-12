@@ -11,7 +11,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TWidget, WIDGETS } from './constants';
 import { useStyles } from './styles';
 
-export default function GitHubLabel() {
+export const ControlledAutocomplete: React.FC = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [value, setValue] = React.useState<TWidget[]>([WIDGETS[1], WIDGETS[2]]);
