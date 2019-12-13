@@ -11,18 +11,6 @@ export const ControlledAutocompleteA: React.FC = () => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [value, setValue] = React.useState<TWidget[]>([]);
-    const [pendingValue, setPendingValue] = React.useState<TWidget[]>([]);
-
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setPendingValue(value);
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setValue(pendingValue);
-        if (anchorEl) { anchorEl.focus(); }
-        setAnchorEl(null);
-    };
 
     return (
         <>
@@ -30,7 +18,7 @@ export const ControlledAutocompleteA: React.FC = () => {
                 aria-describedby={!!anchorEl ? 'some-id' : undefined}
                 className={classes.button}
                 disableRipple
-                onClick={handleClick}
+                onClick={(e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget)}
                 variant="contained"
             >
                 {value.length ? value.map((v: TWidget) => v.description).join(', ') : 'Select Widgets...'}
@@ -54,8 +42,11 @@ export const ControlledAutocompleteA: React.FC = () => {
                     getOptionLabel={(option: TWidget) => option.name}
                     multiple
                     noOptionsText="No labels"
-                    onChange={(_event, newValue) => setPendingValue(newValue)}
-                    onClose={handleClose}
+                    onChange={(_e, v: TWidget[]) => setValue(v)}
+                    onClose={() => {
+                        if (anchorEl) { anchorEl.focus(); }
+                        setAnchorEl(null);
+                    }}
                     open={!!anchorEl}
                     options={WIDGETS}
                     renderInput={renderInputParams => (
@@ -70,7 +61,7 @@ export const ControlledAutocompleteA: React.FC = () => {
                         <>{o.description}{selected ? ' (selected)' : null}</>
                     )}
                     renderTags={() => null}
-                    value={pendingValue}
+                    value={value}
                 />
             </Popper>
         </>
