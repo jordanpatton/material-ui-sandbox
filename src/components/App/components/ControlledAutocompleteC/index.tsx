@@ -1,14 +1,15 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { TWidget, WIDGETS } from '../../../../common/constants';
 
 export const ControlledAutocompleteC: React.FC = () => {
-    const ref = React.useRef<HTMLDivElement>(null);
     const [value, setValue] = React.useState<TWidget[]>([]);
-
     return (
         <Autocomplete
             disableCloseOnSelect
@@ -19,19 +20,27 @@ export const ControlledAutocompleteC: React.FC = () => {
             options={WIDGETS}
             PaperComponent={({ children, ...rest }) => (
                 <Paper {...rest}>
-                    <div
+                    <Box
                         onClick={e => {
-                            console.log('Button.onClick', e);
+                            console.log('Box.onClick', e);
                             e.preventDefault();
                             e.stopPropagation();
                         }}
                         onMouseDown={e => { e.preventDefault(); e.stopPropagation(); }}
                         onPointerDown={e => { e.preventDefault(); e.stopPropagation(); }}
-                        ref={ref}
+                        style={{ display: 'inline-block', verticalAlign: 'top' }}
                     >
-                        left
-                    </div>
-                    {children}
+                        <Typography style={{ fontWeight: 'bold' }}>Filters</Typography>
+                        <br />
+                        <Button>Filter X</Button>
+                        <br />
+                        <Button>Filter Y</Button>
+                        <br />
+                        <Button>Filter Z</Button>
+                    </Box>
+                    <Box style={{ borderLeft: '1px solid #EEEEEE', display: 'inline-block' }}>
+                        {children}
+                    </Box>
                 </Paper>
             )}
             renderInput={renderInputParams => (
