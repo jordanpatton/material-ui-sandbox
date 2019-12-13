@@ -1,11 +1,7 @@
 import React from 'react';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
 import InputBase from '@material-ui/core/InputBase';
 import Popper from '@material-ui/core/Popper';
-import { useTheme } from '@material-ui/core/styles';
-import CloseIcon from '@material-ui/icons/Close';
-import DoneIcon from '@material-ui/icons/Done';
-import SettingsIcon from '@material-ui/icons/Settings';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { TWidget, WIDGETS } from './constants';
@@ -13,10 +9,9 @@ import { useStyles } from './styles';
 
 export const ControlledAutocomplete: React.FC = () => {
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [value, setValue] = React.useState<TWidget[]>([WIDGETS[1], WIDGETS[2]]);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+    const [value, setValue] = React.useState<TWidget[]>([]);
     const [pendingValue, setPendingValue] = React.useState<TWidget[]>([]);
-    const theme = useTheme();
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setPendingValue(value);
@@ -29,96 +24,56 @@ export const ControlledAutocomplete: React.FC = () => {
         setAnchorEl(null);
     };
 
-    const open = Boolean(anchorEl);
-    const id = open ? 'some-id' : undefined;
-    const options = [...WIDGETS].sort((a, b) => {
-        // Display the selected labels first.
-        const ai = value.indexOf(a) === -1 ? value.length + WIDGETS.indexOf(a) : value.indexOf(a);
-        const bi = value.indexOf(b) === -1 ? value.length + WIDGETS.indexOf(b) : value.indexOf(b);
-        return ai - bi;
-    });
-
     return (
-        <React.Fragment>
-            <div className={classes.root}>
-                <ButtonBase
-                    disableRipple
-                    className={classes.button}
-                    aria-describedby={id}
-                    onClick={handleClick}
-                >
-                    <span>Labels</span>
-                    <SettingsIcon />
-                </ButtonBase>
-                {value.map((widget: TWidget) => (
-                    <div
-                        key={widget.name}
-                        className={classes.tag}
-                        style={{
-                            backgroundColor: widget.color,
-                            color: theme.palette.getContrastText(widget.color),
-                        }}
-                    >
-                        {widget.name}
-                    </div>
-                ))}
-            </div>
-            <Popper
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                placement="bottom-start"
-                className={classes.popper}
+        <>
+            <Button
+                aria-describedby={!!anchorEl ? 'some-id' : undefined}
+                className={classes.button}
+                disableRipple
+                onClick={handleClick}
+                variant="contained"
             >
-                <div className={classes.header}>Apply labels to this pull request</div>
+                {value.length ? value.map((v: TWidget) => v.description).join(', ') : 'Select Widgets...'}
+            </Button>
+            <Popper
+                anchorEl={anchorEl}
+                className={classes.popper}
+                id={!!anchorEl ? 'some-id' : undefined}
+                open={!!anchorEl}
+                placement="bottom-start"
+            >
+                <div className={classes.header}>Non-Interactive Zone</div>
                 <Autocomplete
-                    open
-                    onClose={handleClose}
-                    multiple
                     classes={{
                         option: classes.option,
                         paper: classes.paper,
                         popperDisablePortal: classes.popperDisablePortal,
                     }}
-                    value={pendingValue}
-                    onChange={(_event, newValue) => {
-                        setPendingValue(newValue);
-                    }}
                     disableCloseOnSelect
                     disablePortal
-                    renderTags={() => null}
-                    noOptionsText="No labels"
-                    renderOption={(option: TWidget, { selected }) => (
-                        <React.Fragment>
-                            <DoneIcon
-                                className={classes.iconSelected}
-                                style={{ visibility: selected ? 'visible' : 'hidden' }}
-                            />
-                            <span className={classes.color} style={{ backgroundColor: option.color }} />
-                            <div className={classes.text}>
-                                {option.name}
-                                <br />
-                                {option.description}
-                            </div>
-                            <CloseIcon
-                                className={classes.close}
-                                style={{ visibility: selected ? 'visible' : 'hidden' }}
-                            />
-                        </React.Fragment>
-                    )}
-                    options={options}
                     getOptionLabel={(option: TWidget) => option.name}
-                    renderInput={params => (
+                    multiple
+                    noOptionsText="No labels"
+                    onChange={(_event, newValue) => setPendingValue(newValue)}
+                    onClose={handleClose}
+                    open={!!anchorEl}
+                    options={WIDGETS}
+                    renderInput={renderInputParams => (
                         <InputBase
                             autoFocus
                             className={classes.inputBase}
-                            inputProps={params.inputProps}
-                            ref={params.InputProps.ref}
+                            inputProps={renderInputParams.inputProps}
+                            ref={renderInputParams.InputProps.ref}
                         />
                     )}
+                    renderOption={(o: TWidget, { selected }) => (
+                        <>{o.description}{selected ? ' (selected)' : null}</>
+                    )}
+                    renderTags={() => null}
+                    value={pendingValue}
                 />
             </Popper>
-        </React.Fragment>
+        </>
     );
 }
 
