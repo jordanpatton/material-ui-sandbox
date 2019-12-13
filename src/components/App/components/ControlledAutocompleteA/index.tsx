@@ -13,9 +13,9 @@ export const ControlledAutocompleteA: React.FC = () => {
     const [value, setValue] = React.useState<TWidget[]>([]);
     const [pendingValue, setPendingValue] = React.useState<TWidget[]>([]);
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    const handleClick = (e: React.MouseEvent<HTMLElement>) => {
         setPendingValue(value);
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(e.currentTarget);
     };
 
     const handleClose = () => {
@@ -51,10 +51,10 @@ export const ControlledAutocompleteA: React.FC = () => {
                     }}
                     disableCloseOnSelect
                     disablePortal
-                    getOptionLabel={(option: TWidget) => option.name}
+                    getOptionLabel={(o: TWidget) => o.name}
                     multiple
-                    noOptionsText="No labels"
-                    onChange={(_event, newValue) => setPendingValue(newValue)}
+                    noOptionsText="No Widgets"
+                    onChange={(_e, v) => setPendingValue(v)}
                     onClose={handleClose}
                     open={!!anchorEl}
                     options={WIDGETS}

@@ -39,9 +39,9 @@ export const ControlledAutocompleteA: React.FC = () => {
                     }}
                     disableCloseOnSelect
                     disablePortal
-                    getOptionLabel={(option: TWidget) => option.name}
+                    getOptionLabel={(o: TWidget) => o.name}
                     multiple
-                    noOptionsText="No labels"
+                    noOptionsText="No Widgets"
                     onChange={(_e, v: TWidget[]) => setValue(v)}
                     onClose={() => {
                         if (anchorEl) { anchorEl.focus(); }
