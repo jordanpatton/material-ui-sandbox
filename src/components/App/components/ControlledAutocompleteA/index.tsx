@@ -7,7 +7,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TWidget, WIDGETS } from './constants';
 import { useStyles } from './styles';
 
-export const ControlledAutocomplete: React.FC = () => {
+export const ControlledAutocompleteA: React.FC = () => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [value, setValue] = React.useState<TWidget[]>([]);
@@ -77,4 +77,4 @@ export const ControlledAutocomplete: React.FC = () => {
     );
 }
 
-export default ControlledAutocomplete;
+export default ControlledAutocompleteA;
