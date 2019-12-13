@@ -76,5 +76,6 @@ export const ControlledAutocompleteA: React.FC = () => {
         </>
     );
 }
+ControlledAutocompleteA.displayName = 'ControlledAutocompleteA';
 
 export default ControlledAutocompleteA;

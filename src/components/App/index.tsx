@@ -7,18 +7,38 @@ import ControlledAutocompleteC from './components/ControlledAutocompleteC';
 
 import './styles.css';
 
-const App: React.FC = () => (
-    <>
-        <Box style={{ backgroundColor: '#EEEEEE', padding: '20px' }}>
-            <ControlledAutocompleteA />
-        </Box>
-        <Box style={{ backgroundColor: '#EEEEEE', padding: '20px' }}>
-            <ControlledAutocompleteB />
-        </Box>
-        <Box style={{ backgroundColor: '#EEEEEE', padding: '20px' }}>
-            <ControlledAutocompleteC />
-        </Box>
-    </>
-);
+export const windowOnClick: EventListener = e => {
+    // console.log('window.onClick', e);
+};
+
+export class App extends React.Component {
+    public componentDidMount() {
+        if (typeof window !== 'undefined') {
+            window.addEventListener('click', windowOnClick);
+        }
+    }
+
+    public componentWillUnmount() {
+        if (typeof window !== 'undefined') {
+            window.removeEventListener('click', windowOnClick);
+        }
+    }
+
+    public render() {
+        return (
+            <>
+                <Box style={{ backgroundColor: '#EEEEEE', padding: '20px' }}>
+                    <ControlledAutocompleteA />
+                </Box>
+                <Box style={{ backgroundColor: '#EEEEEE', padding: '20px' }}>
+                    <ControlledAutocompleteB />
+                </Box>
+                <Box style={{ backgroundColor: '#EEEEEE', padding: '20px' }}>
+                    <ControlledAutocompleteC />
+                </Box>
+            </>
+        );
+    }
+}
 
 export default App;

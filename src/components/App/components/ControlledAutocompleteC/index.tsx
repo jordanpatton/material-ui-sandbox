@@ -1,13 +1,12 @@
 import React from 'react';
-import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { TWidget, WIDGETS } from '../../../../common/constants';
 
-export const ControlledAutocompleteA: React.FC = () => {
-    const [open, setOpen] = React.useState<boolean>(true);
+export const ControlledAutocompleteC: React.FC = () => {
+    const ref = React.useRef<HTMLDivElement>(null);
     const [value, setValue] = React.useState<TWidget[]>([]);
 
     return (
@@ -17,15 +16,21 @@ export const ControlledAutocompleteA: React.FC = () => {
             getOptionLabel={(o: TWidget) => o.name}
             multiple
             onChange={(_e, v: TWidget[]) => setValue(v)}
-            onClose={() => setOpen(false)}
-            onOpen={() => setOpen(true)}
-            open={open}
             options={WIDGETS}
             PaperComponent={({ children, ...rest }) => (
                 <Paper {...rest}>
-                    <Box onClick={e => { e.preventDefault(); e.stopPropagation(); }}>
+                    <div
+                        onClick={e => {
+                            console.log('Button.onClick', e);
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }}
+                        onMouseDown={e => { e.preventDefault(); e.stopPropagation(); }}
+                        onPointerDown={e => { e.preventDefault(); e.stopPropagation(); }}
+                        ref={ref}
+                    >
                         left
-                    </Box>
+                    </div>
                     {children}
                 </Paper>
             )}
@@ -43,5 +48,6 @@ export const ControlledAutocompleteA: React.FC = () => {
         />
     );
 }
+ControlledAutocompleteC.displayName = 'ControlledAutocompleteC';
 
-export default ControlledAutocompleteA;
+export default ControlledAutocompleteC;
