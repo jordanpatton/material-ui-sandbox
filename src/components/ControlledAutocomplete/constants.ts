@@ -5,8 +5,8 @@ export interface TWidget {
 }
 
 export const WIDGETS: TWidget[] = [
-    { color: 'cyan', description: 'C', name: 'c' },
-    { color: 'magenta', description: 'M', name: 'm' },
-    { color: 'yellow', description: 'Y', name: 'y' },
-    { color: 'black', description: 'K', name: 'k' },
+    { color: '#00FFFF', description: 'C', name: 'c' },
+    { color: '#FF00FF', description: 'M', name: 'm' },
+    { color: '#FFFF00', description: 'Y', name: 'y' },
+    { color: '#000000', description: 'K', name: 'k' },
 ];
