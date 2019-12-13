@@ -31,6 +31,12 @@ export const ControlledAutocomplete: React.FC = () => {
 
     const open = Boolean(anchorEl);
     const id = open ? 'some-id' : undefined;
+    const options = [...WIDGETS].sort((a, b) => {
+        // Display the selected labels first.
+        const ai = value.indexOf(a) === -1 ? value.length + WIDGETS.indexOf(a) : value.indexOf(a);
+        const bi = value.indexOf(b) === -1 ? value.length + WIDGETS.indexOf(b) : value.indexOf(b);
+        return ai - bi;
+    });
 
     return (
         <React.Fragment>
@@ -44,16 +50,16 @@ export const ControlledAutocomplete: React.FC = () => {
                     <span>Labels</span>
                     <SettingsIcon />
                 </ButtonBase>
-                {value.map((label: TWidget) => (
+                {value.map((widget: TWidget) => (
                     <div
-                        key={label.name}
+                        key={widget.name}
                         className={classes.tag}
                         style={{
-                        backgroundColor: label.color,
-                        color: theme.palette.getContrastText(label.color),
+                            backgroundColor: widget.color,
+                            color: theme.palette.getContrastText(widget.color),
                         }}
                     >
-                        {label.name}
+                        {widget.name}
                     </div>
                 ))}
             </div>
@@ -65,59 +71,52 @@ export const ControlledAutocomplete: React.FC = () => {
                 className={classes.popper}
             >
                 <div className={classes.header}>Apply labels to this pull request</div>
-                    <Autocomplete
-                        open
-                        onClose={handleClose}
-                        multiple
-                        classes={{
-                            paper: classes.paper,
-                            option: classes.option,
-                            popperDisablePortal: classes.popperDisablePortal,
-                        }}
-                        value={pendingValue}
-                        onChange={(_event, newValue) => {
-                            setPendingValue(newValue);
-                        }}
-                        disableCloseOnSelect
-                        disablePortal
-                        renderTags={() => null}
-                        noOptionsText="No labels"
-                        renderOption={(option: TWidget, { selected }) => (
-                            <React.Fragment>
-                                <DoneIcon
-                                    className={classes.iconSelected}
-                                    style={{ visibility: selected ? 'visible' : 'hidden' }}
-                                />
-                                <span className={classes.color} style={{ backgroundColor: option.color }} />
-                                <div className={classes.text}>
-                                    {option.name}
-                                    <br />
-                                    {option.description}
-                                </div>
-                                <CloseIcon
-                                    className={classes.close}
-                                    style={{ visibility: selected ? 'visible' : 'hidden' }}
-                                />
-                            </React.Fragment>
-                        )}
-                        options={[...WIDGETS].sort((a, b) => {
-                            // Display the selected labels first.
-                            let ai = value.indexOf(a);
-                            ai = ai === -1 ? value.length + WIDGETS.indexOf(a) : ai;
-                            let bi = value.indexOf(b);
-                            bi = bi === -1 ? value.length + WIDGETS.indexOf(b) : bi;
-                            return ai - bi;
-                        })}
-                        getOptionLabel={(option: TWidget) => option.name}
-                        renderInput={params => (
-                            <InputBase
-                            ref={params.InputProps.ref}
-                            inputProps={params.inputProps}
+                <Autocomplete
+                    open
+                    onClose={handleClose}
+                    multiple
+                    classes={{
+                        option: classes.option,
+                        paper: classes.paper,
+                        popperDisablePortal: classes.popperDisablePortal,
+                    }}
+                    value={pendingValue}
+                    onChange={(_event, newValue) => {
+                        setPendingValue(newValue);
+                    }}
+                    disableCloseOnSelect
+                    disablePortal
+                    renderTags={() => null}
+                    noOptionsText="No labels"
+                    renderOption={(option: TWidget, { selected }) => (
+                        <React.Fragment>
+                            <DoneIcon
+                                className={classes.iconSelected}
+                                style={{ visibility: selected ? 'visible' : 'hidden' }}
+                            />
+                            <span className={classes.color} style={{ backgroundColor: option.color }} />
+                            <div className={classes.text}>
+                                {option.name}
+                                <br />
+                                {option.description}
+                            </div>
+                            <CloseIcon
+                                className={classes.close}
+                                style={{ visibility: selected ? 'visible' : 'hidden' }}
+                            />
+                        </React.Fragment>
+                    )}
+                    options={options}
+                    getOptionLabel={(option: TWidget) => option.name}
+                    renderInput={params => (
+                        <InputBase
                             autoFocus
                             className={classes.inputBase}
-                            />
-                        )}
-                    />
+                            inputProps={params.inputProps}
+                            ref={params.InputProps.ref}
+                        />
+                    )}
+                />
             </Popper>
         </React.Fragment>
     );
